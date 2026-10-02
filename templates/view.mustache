@@ -1,0 +1,84 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_simplifyreading/view
+
+    Student interface for a Simplify Text resource: paste box, Rewrite button,
+    and the easier version with Read aloud, Stop, speed and Redo controls.
+
+    Context variables required for this template:
+    * rootid - Unique id of the outer element, passed to the JavaScript.
+    * cmid - Course module id.
+    * maxwords - Word limit for pasted text.
+    * canmanage - Whether to show the teacher note.
+    * gradelabel - Reading level label, e.g. "Grade 3 (Lexile 520L)".
+
+    Example context (json):
+    {
+        "rootid": "mod_simplifyreading_abc123",
+        "cmid": 42,
+        "maxwords": 3000,
+        "canmanage": true,
+        "gradelabel": "Grade 3 (Lexile 520L)"
+    }
+}}
+<div id="{{rootid}}" class="mod_simplifyreading" data-cmid="{{cmid}}" data-maxwords="{{maxwords}}">
+    {{#canmanage}}
+    <div class="alert alert-info small">{{#str}} teacherinfo, mod_simplifyreading, {{gradelabel}} {{/str}}</div>
+    {{/canmanage}}
+
+    <div class="mb-3">
+        <label for="{{rootid}}-input" class="form-label font-weight-bold fw-bold">{{#str}} pastelabel, mod_simplifyreading {{/str}}</label>
+        <p id="{{rootid}}-help" class="text-muted mb-2">{{#str}} pastehelp, mod_simplifyreading {{/str}}</p>
+        <textarea id="{{rootid}}-input" class="form-control mod_simplifyreading-input" rows="12"
+            aria-describedby="{{rootid}}-help {{rootid}}-count" data-region="input"></textarea>
+        <div id="{{rootid}}-count" class="small text-muted mt-1" data-region="wordcount" aria-live="polite"></div>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-lg" data-action="rewrite">{{#str}} rewrite, mod_simplifyreading {{/str}}</button>
+
+    <div class="alert alert-danger mt-3 d-none" role="alert" data-region="error"></div>
+
+    <div class="mt-3 d-none" role="status" data-region="loading">
+        <span class="spinner-border spinner-border-sm mr-2 me-2" aria-hidden="true"></span>
+        {{#str}} loading, mod_simplifyreading {{/str}}
+    </div>
+
+    <div class="mt-4 d-none" data-region="result">
+        <h3 class="h4">{{#str}} easierversion, mod_simplifyreading {{/str}}</h3>
+
+        <div class="d-flex flex-wrap align-items-center mb-2 mod_simplifyreading-speech" data-region="speechcontrols">
+            <button type="button" class="btn btn-success mr-2 me-2 mb-2" data-action="readaloud">
+                {{#str}} readaloud, mod_simplifyreading {{/str}}
+            </button>
+            <button type="button" class="btn btn-outline-secondary mr-2 me-2 mb-2" data-action="stop" disabled>
+                {{#str}} stop, mod_simplifyreading {{/str}}
+            </button>
+            <label for="{{rootid}}-speed" class="mr-2 me-2 mb-2">{{#str}} speed, mod_simplifyreading {{/str}}</label>
+            <select id="{{rootid}}-speed" class="custom-select form-select w-auto mb-2" data-region="speed">
+                <option value="0.75">{{#str}} speedslow, mod_simplifyreading {{/str}}</option>
+                <option value="1" selected>{{#str}} speednormal, mod_simplifyreading {{/str}}</option>
+            </select>
+        </div>
+        <div class="alert alert-warning small d-none" data-region="nospeech">{{#str}} nospeech, mod_simplifyreading {{/str}}</div>
+
+        <div class="mod_simplifyreading-output border rounded p-3" tabindex="-1" data-region="output"></div>
+
+        <p class="text-muted mt-3 mb-2">{{#str}} redohelp, mod_simplifyreading {{/str}}</p>
+        <button type="button" class="btn btn-secondary" data-action="redo">{{#str}} redo, mod_simplifyreading {{/str}}</button>
+    </div>
+</div>
