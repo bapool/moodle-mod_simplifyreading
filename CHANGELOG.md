@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 (2026-10-02)
+
+- The paste box and Rewrite button are hidden once the rewrite appears; a "Paste new text" button brings back an empty box.
+- "Easier version" heading renamed to "New version".
+- Added a Pause/Resume button for Read aloud.
+
 ## 0.1.0 (2026-10-02)
 
 - First release.

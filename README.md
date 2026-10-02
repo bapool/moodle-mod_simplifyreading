@@ -49,7 +49,7 @@ Teachers see a small note on the resource page showing the reading level in use.
 
 1. A large text box with a live word count.
 2. **Rewrite** - sends the text to the AI.
-3. The **Easier version**, in larger type, with:
+3. The **New version**, in larger type, with:
    - **Read aloud**, **Stop**, and a **Reading speed** choice (Slow / Normal), using the browser's built-in speech (Web Speech API), the same approach as AI Proofreader.
    - **Redo** at the bottom, which sends the same original text again and asks the AI for a fresh version with different wording.
 

@@ -37,10 +37,7 @@
     }
 }}
 <div id="{{rootid}}" class="mod_simplifyreading" data-cmid="{{cmid}}" data-maxwords="{{maxwords}}">
-    {{#canmanage}}
-    <div class="alert alert-info small">{{#str}} teacherinfo, mod_simplifyreading, {{gradelabel}} {{/str}}</div>
-    {{/canmanage}}
-
+    <div data-region="inputarea">
     <div class="mb-3">
         <label for="{{rootid}}-input" class="form-label font-weight-bold fw-bold">{{#str}} pastelabel, mod_simplifyreading {{/str}}</label>
         <p id="{{rootid}}-help" class="text-muted mb-2">{{#str}} pastehelp, mod_simplifyreading {{/str}}</p>
@@ -50,6 +47,7 @@
     </div>
 
     <button type="button" class="btn btn-primary btn-lg" data-action="rewrite">{{#str}} rewrite, mod_simplifyreading {{/str}}</button>
+    </div>
 
     <div class="alert alert-danger mt-3 d-none" role="alert" data-region="error"></div>
 
@@ -64,6 +62,9 @@
         <div class="d-flex flex-wrap align-items-center mb-2 mod_simplifyreading-speech" data-region="speechcontrols">
             <button type="button" class="btn btn-success mr-2 me-2 mb-2" data-action="readaloud">
                 {{#str}} readaloud, mod_simplifyreading {{/str}}
+            </button>
+            <button type="button" class="btn btn-outline-primary mr-2 me-2 mb-2" data-action="pause" disabled>
+                {{#str}} pause, mod_simplifyreading {{/str}}
             </button>
             <button type="button" class="btn btn-outline-secondary mr-2 me-2 mb-2" data-action="stop" disabled>
                 {{#str}} stop, mod_simplifyreading {{/str}}
@@ -80,5 +81,6 @@
 
         <p class="text-muted mt-3 mb-2">{{#str}} redohelp, mod_simplifyreading {{/str}}</p>
         <button type="button" class="btn btn-secondary" data-action="redo">{{#str}} redo, mod_simplifyreading {{/str}}</button>
+        <button type="button" class="btn btn-outline-secondary ml-2 ms-2" data-action="newtext">{{#str}} newtext, mod_simplifyreading {{/str}}</button>
     </div>
 </div>

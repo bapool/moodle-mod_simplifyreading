@@ -88,11 +88,14 @@ export const init = (rootId) => {
     const wordCount = root.querySelector('[data-region="wordcount"]');
     const rewriteButton = root.querySelector('[data-action="rewrite"]');
     const redoButton = root.querySelector('[data-action="redo"]');
+    const newTextButton = root.querySelector('[data-action="newtext"]');
+    const inputArea = root.querySelector('[data-region="inputarea"]');
     const errorBox = root.querySelector('[data-region="error"]');
     const loading = root.querySelector('[data-region="loading"]');
     const result = root.querySelector('[data-region="result"]');
     const output = root.querySelector('[data-region="output"]');
     const readButton = root.querySelector('[data-action="readaloud"]');
+    const pauseButton = root.querySelector('[data-action="pause"]');
     const stopButton = root.querySelector('[data-action="stop"]');
     const speedSelect = root.querySelector('[data-region="speed"]');
     const speechControls = root.querySelector('[data-region="speechcontrols"]');
@@ -104,6 +107,7 @@ export const init = (rootId) => {
     let attempt = 0;
     let busy = false;
     let speaking = false;
+    let paused = false;
     let speechRun = 0;
 
     // Word count.
@@ -117,10 +121,31 @@ export const init = (rootId) => {
 
     // Speech.
 
+    const setPauseLabel = async(isPaused) => {
+        pauseButton.textContent = await getString(isPaused ? 'resume' : 'pause', 'mod_simplifyreading');
+    };
+
     const setSpeakingState = (isSpeaking) => {
         speaking = isSpeaking;
+        paused = false;
         readButton.disabled = isSpeaking;
+        pauseButton.disabled = !isSpeaking;
         stopButton.disabled = !isSpeaking;
+        setPauseLabel(false);
+    };
+
+    const togglePause = () => {
+        if (!speaking) {
+            return;
+        }
+        if (paused) {
+            window.speechSynthesis.resume();
+            paused = false;
+        } else {
+            window.speechSynthesis.pause();
+            paused = true;
+        }
+        setPauseLabel(paused);
     };
 
     const stopSpeech = () => {
@@ -184,6 +209,7 @@ export const init = (rootId) => {
         busy = isBusy;
         rewriteButton.disabled = isBusy;
         redoButton.disabled = isBusy;
+        newTextButton.disabled = isBusy;
         loading.classList.toggle('d-none', !isBusy);
     };
 
@@ -213,6 +239,8 @@ export const init = (rootId) => {
 
             if (response.success) {
                 output.innerHTML = response.html;
+                // Hide the original text so only the new version is on screen.
+                inputArea.classList.add('d-none');
                 result.classList.remove('d-none');
                 output.focus();
                 result.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -241,8 +269,22 @@ export const init = (rootId) => {
         runRewrite(lastText);
     });
 
+    newTextButton.addEventListener('click', () => {
+        stopSpeech();
+        errorBox.classList.add('d-none');
+        result.classList.add('d-none');
+        output.innerHTML = '';
+        input.value = '';
+        lastText = '';
+        attempt = 0;
+        inputArea.classList.remove('d-none');
+        updateWordCount();
+        input.focus();
+    });
+
     if (speechSupported) {
         readButton.addEventListener('click', readAloud);
+        pauseButton.addEventListener('click', togglePause);
         stopButton.addEventListener('click', stopSpeech);
         speedSelect.addEventListener('change', () => {
             if (speaking) {
